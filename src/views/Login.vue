@@ -50,15 +50,7 @@
             <span>Login</span>
           </button>
         </div>
-        <a
-          href="/register"
-          class="btn btn-primary btn-block"
-          :disabled="loading"
-        >
-          <span
-            v-show="loading"
-            class="spinner-border spinner-border-sm"
-          ></span>
+        <a href="/register" class="btn btn-primary btn-block">
           <!-- <a href="/register"> Register</a> -->
           <span>Register</span>
         </a>
@@ -73,15 +65,15 @@
 </template>
 
 <script>
-import User from '../models/user';
+import User from "../models/user";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-      user: new User('', ''),
+      user: new User("", ""),
       loading: false,
-      message: '',
+      message: "",
     };
   },
   computed: {
@@ -91,7 +83,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push("/profile");
     }
   },
   methods: {
@@ -104,9 +96,9 @@ export default {
         }
 
         if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
+          this.$store.dispatch("auth/login", this.user).then(
             () => {
-              this.$router.push('/profile');
+              this.$router.push("/profile");
             },
             (error) => {
               this.loading = false;

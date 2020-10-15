@@ -8,7 +8,7 @@
       <div v-if="content" class="jumbotron font15 grad">
         {{ content.balance }} {{ content.currency }}
       </div>
-      <div v-else class="jumbotron font15 grad">รอสักครู่...</div>
+      <div v-else class="jumbotron font15 grad">0.00 ฿</div>
     </div>
     <div class="mt-5">
       <div>
@@ -65,13 +65,13 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import UserService from "../services/user.service";
 
 export default {
-  name: 'User',
+  name: "User",
   data() {
     return {
-      content: '',
+      content: "",
     };
   },
   computed: {
@@ -82,8 +82,10 @@ export default {
   methods: {
     getBalance() {
       UserService.getUserBalanceFromUserbet().then(
-        (response) => {
+        async (response) => {
           this.content = response.data.credit;
+          // const res = await UserService.getUserDepositList();
+          // console.log(res.data);
         },
         (error) => {
           this.content =
@@ -98,7 +100,7 @@ export default {
   },
   mounted() {
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
     this.getBalance();
   },

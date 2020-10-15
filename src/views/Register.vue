@@ -28,7 +28,7 @@
                   v-if="submitted && errors.has('first_name')"
                   class="alert-danger"
                 >
-                  {{ errors.first('first_name') }}
+                  {{ errors.first("first_name") }}
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@
                 v-if="submitted && errors.has('last_name')"
                 class="alert-danger"
               >
-                {{ errors.first('last_name') }}
+                {{ errors.first("last_name") }}
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@
               v-if="submitted && errors.has('username')"
               class="alert-danger"
             >
-              {{ errors.first('username') }}
+              {{ errors.first("username") }}
             </div>
           </div>
 
@@ -92,7 +92,7 @@
               v-if="submitted && errors.has('password')"
               class="alert-danger"
             >
-              {{ errors.first('password') }}
+              {{ errors.first("password") }}
             </div>
           </div>
 
@@ -127,7 +127,7 @@
               v-if="submitted && errors.has('bank_number')"
               class="alert-danger"
             >
-              {{ errors.first('bank_number') }}
+              {{ errors.first("bank_number") }}
             </div>
           </div>
 
@@ -145,7 +145,13 @@
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block">Sign Up</button>
+            <button class="btn btn-primary btn-block" :disabled="loading">
+              <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span>SignUp</span>
+            </button>
           </div>
         </div>
       </form>
@@ -162,16 +168,17 @@
 </template>
 
 <script>
-import User from '../models/user';
+import User from "../models/user";
 
 export default {
-  name: 'Register',
+  name: "Register",
   data() {
     return {
-      user: new User('', '', '', '', '', '', '', '', ''),
+      user: new User("", "", "", "", "", "", "", "", ""),
       submitted: false,
       successful: false,
-      message: '',
+      loading: false,
+      message: "",
     };
   },
   computed: {
@@ -181,21 +188,23 @@ export default {
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push("/profile");
     }
   },
   methods: {
     handleRegister() {
-      this.message = '';
+      this.loading = true;
+      this.message = "";
       this.submitted = true;
       this.$validator.validate().then((isValid) => {
         if (isValid) {
-          this.$store.dispatch('auth/register', this.user).then(
+          this.$store.dispatch("auth/register", this.user).then(
             (data) => {
               this.message = data.message;
               this.successful = true;
             },
             (error) => {
+              this.loading = false;
               this.message =
                 (error.response &&
                   error.response.data &&

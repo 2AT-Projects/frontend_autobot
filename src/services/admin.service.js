@@ -25,7 +25,7 @@ class UserDataService {
     deleteAll() {
         return http.delete(`/users`, { headers: authHeader() });
     }
-
+    
     findByUserUfabetName(user_ufabet) {
         return http.get(`/users?user_ufabet=${user_ufabet}`, { headers: authHeader() });
     }
