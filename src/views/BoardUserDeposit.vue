@@ -61,7 +61,7 @@
 
     <footer class="mt-5 cen">
       <div>
-        <h4 class="text-left">รายการฝากล่าสุด</h4>
+        <h4 class="text-left">5 รายการฝากล่าสุด</h4>
         <hr />
       </div>
       <div>
