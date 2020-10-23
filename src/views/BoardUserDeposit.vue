@@ -15,16 +15,17 @@
             alt=""
             style="width: 20%"
           />
+
           <div class="flex-grow-1" style="padding-left: 8px; text-align: right">
-            <div>
-              <p class="font15">{{ copy_code }}</p>
+            <div v-if="copy_code">
+              <span class="font15 alert-success copycode">{{ copy_code }}</span>
             </div>
             <div
               id="account"
               style="
                 font-size: 24px;
                 font-weight: bold;
-                margin: -5px 0;
+                margin-top: 10px;
                 letter-spacing: 3px;
               "
             >
@@ -184,6 +185,11 @@ export default {
 </script>
 
 <style scoped>
+.copycode {
+  padding: 7px;
+  border-radius: 5px;
+}
+
 #rcorners1 {
   border-radius: 5px;
   background: #1a1a1ae3;
@@ -200,7 +206,7 @@ export default {
   color: white;
 }
 .font15 {
-  color: greenyellow;
+  color: rgb(31, 31, 31);
   /* border: 1px solid greenyellow; */
   /* width: 35%; */
 }

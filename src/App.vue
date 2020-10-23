@@ -30,7 +30,7 @@
           </li>
           <li v-if="showAdminBoard" class="nav-item">
             <router-link to="/admin/withdraw" class="nav-link"
-              >รายการรอถอนเงิน
+              >รายการถอนเงิน
             </router-link>
           </li>
           <li v-if="showModeratorBoard" class="nav-item">

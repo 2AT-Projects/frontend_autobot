@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <table class="table table-dark table-hover cen mt-4">
+    <table class="table table-hover cen mt-4">
       <thead>
         <tr>
           <th>id</th>
@@ -50,7 +50,7 @@
                   item.credit
                 )
               "
-              variant="warning"
+              variant="success"
               block
               :disabled="loading"
             >
@@ -134,8 +134,8 @@ export default {
         .then((res) => {
           if (res) {
             this.loading = false;
-            this.refreshList();
             this.message = res.data.message;
+            this.refreshList();
           }
         })
         .catch((err) => {

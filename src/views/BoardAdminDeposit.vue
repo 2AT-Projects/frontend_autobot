@@ -38,7 +38,7 @@
           <td>{{ item.bank_number }}</td>
           <td>เติมเงิน {{ item.deposit }} บาท</td>
           <td v-if="item.status == 0">
-            <p class="alert-wraning">รอดำเนินการ</p>
+            <p class="alert-warning">รอดำเนินการ</p>
           </td>
           <td v-else>
             <p class="alert-success">เติมเงินสำเร็จ</p>
