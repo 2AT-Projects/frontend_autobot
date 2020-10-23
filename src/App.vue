@@ -28,6 +28,11 @@
               >จัดการสมาชิก (Ufabet)
             </router-link>
           </li>
+          <li v-if="showAdminBoard" class="nav-item">
+            <router-link to="/admin/withdraw" class="nav-link"
+              >รายการรอถอนเงิน
+            </router-link>
+          </li>
           <li v-if="showModeratorBoard" class="nav-item">
             <router-link to="/mod" class="nav-link"
               >Moderator Board</router-link
@@ -93,14 +98,14 @@ export default {
     },
     showUserBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_USER');
+        return this.currentUser.roles.includes("ROLE_USER");
       }
 
       return false;
     },
     showAdminBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_ADMIN');
+        return this.currentUser.roles.includes("ROLE_ADMIN");
       }
 
       return false;
@@ -108,7 +113,7 @@ export default {
 
     showModeratorBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_MODERATOR');
+        return this.currentUser.roles.includes("ROLE_MODERATOR");
       }
 
       return false;
@@ -116,8 +121,8 @@ export default {
   },
   methods: {
     logOut() {
-      this.$store.dispatch('auth/logout');
-      this.$router.push('/login');
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
     },
   },
 };
@@ -125,7 +130,7 @@ export default {
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: Raleway;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */

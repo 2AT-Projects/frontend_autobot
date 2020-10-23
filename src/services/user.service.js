@@ -17,7 +17,7 @@ class UserService {
         return axios.get(`${API_URL}/user/deposit-list`, { headers: authHeader() });
     }
 
-    getUserBalanceFromUserbet() {
+    getUserBalanceFromUfabet() {
         return axios.get(`${API_URL}/user/balance`, { headers: authHeader() })
     }
 
@@ -34,7 +34,7 @@ class UserService {
     }
 
     getAdminBoard() {
-        return axios.get(`${API_URL}admin`, { headers: authHeader() });
+        return axios.get(`${API_URL}/admin`, { headers: authHeader() });
     }
 
     getAdminScbDeposit() {
@@ -62,6 +62,16 @@ class UserService {
 
     getAdminQueTransfer() {
         return axios.get(`${API_URL_1}/topup`, { headers: authHeader() })
+    }
+
+    getAdminWithdraw() {
+        return axios.get(`${API_URL}/admin/withdraw-list`, { headers: authHeader() })
+    }
+
+    updateStatus(ob) {
+        return axios.post(`${API_URL}/admin/update-withdraw`, ob, {
+            headers: authHeader(),
+        });
     }
 }
 

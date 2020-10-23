@@ -5,13 +5,28 @@
       <hr />
     </div>
     <div class="center mt-5">
-      <p v-if="content">
-        <strong>เครดิตคงเหลือ:</strong> {{ content.balance }}
-        {{ content.currency }}
-      </p>
-      <p v-else><strong>เครดิตคงเหลือ:</strong> 0.00 ฿</p>
+      <h3 v-if="content">
+        <strong>เครดิตคงเหลือ: </strong>
+        <span
+          v-show="loading_balance"
+          class="spinner-border spinner-border-md"
+        ></span>
+        <span v-if="loading_balance == false">{{ balance }}</span>
+      </h3>
+      <h3 v-else>
+        <strong>เครดิตคงเหลือ:</strong>
+      </h3>
 
-      <div class="input-credit">
+      <span>
+        <font-awesome-icon
+          class="pointer"
+          @click="refreshBalance"
+          icon="sync"
+        />
+      </span>
+      <span> ดึงข้อมูล เวลา {{ time }}</span>
+
+      <div class="input-credit mt-3">
         <b-form v-on:submit.prevent="confirmModal">
           <b-form-group description="โปรดกรอกข้อมูลที่เป็นความจริงเท่านั้น">
             <b-input-group prepend="฿" is-text>
@@ -67,12 +82,17 @@
               <th>สถานะ</th>
             </tr>
           </thead>
-          <tbody v-if="mergedList.length > 0">
-            <tr v-for="(item, i) in mergedList" :key="i">
+          <tbody v-if="content.length > 0">
+            <tr v-for="(item, i) in content" :key="i">
               <td>{{ item.time }}</td>
               <td>{{ item.date }}</td>
               <td>ถอนเงิน {{ item.credit }} บาท</td>
-              <td>{{ item.status }}</td>
+              <td v-if="item.status == 0">
+                <p class="alert-warning">กำลังดำเนินการ</p>
+              </td>
+              <td v-else>
+                <p class="alert-success">ดำเนินการเสร็จสิ้น</p>
+              </td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -97,14 +117,16 @@ export default {
   name: "Withdraw",
   data() {
     return {
+      time: "",
+      balance: "",
       credit: "",
       message: {
         success: "",
         unsuccess: "",
       },
       content: [],
-      mergedList: [],
       loading: false,
+      loading_balance: false,
     };
   },
   computed: {
@@ -118,6 +140,11 @@ export default {
     }
   },
   methods: {
+    getTime() {
+      const date = new Date();
+      const newTime = moment(date, ["h:mm A"]).format("HH:mm");
+      this.time = newTime;
+    },
     confirmModal() {
       this.$bvModal
         .msgBoxConfirm(
@@ -154,6 +181,7 @@ export default {
           this.loading = false;
           this.message.success = "";
           this.message.success = res.data.message;
+          this.refreshWithdrawList();
         })
         .catch((err) => {
           this.loading = false;
@@ -166,14 +194,21 @@ export default {
       this.credit = "";
     },
 
+    refreshBalance() {
+      this.getBalance();
+    },
+
     async getBalance() {
-      await UserService.getUserBalanceFromUserbet()
+      this.loading_balance = true;
+      await UserService.getUserBalanceFromUfabet()
         .then((response) => {
-          this.content = response.data.credit;
-          console.log(this.content);
+          this.loading_balance = false;
+          this.balance = response.data.credit.balance;
+          // console.log(this.content);
         })
         .catch((error) => {
-          this.content =
+          this.loading_balance = false;
+          this.balance =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -182,38 +217,23 @@ export default {
         });
     },
 
-    mergedStatus(list) {
-      const obj = {
-        0: "กำลังดำเนินการ",
-        1: "ดำเนินการเสร็จสิ้น",
-      };
-      const status = [];
-      list.forEach((element) => {
-        const st = obj[element["status"]];
-        status.push({ status: st });
-      });
-
-      for (let i = 0; i < list.length; i++) {
-        this.mergedList.push({
-          ...list[i],
-          ...status[i],
+    async withdrawList() {
+      await UserService.getUserWithdrawList()
+        .then((res) => {
+          this.content = res.data.datas;
+        })
+        .catch((err) => {
+          this.content = err;
         });
-      }
     },
 
-    async withdrawList() {
-      try {
-        const response = await UserService.getUserWithdrawList();
-        const list = response.data.datas;
-        this.mergedStatus(list);
-      } catch (err) {
-        this.mergedList = "";
-        this.mergedList = `fail.${err}`;
-      }
+    refreshWithdrawList() {
+      this.withdrawList();
     },
   },
   mounted() {
     this.getBalance();
+    this.getTime();
     // setInterval(async () => {
     //   await this.getBalance();
     // }, 4000);
@@ -225,11 +245,15 @@ export default {
 <style scoped>
 p {
   color: rgb(32, 32, 32);
-  font-size: 25px;
+  font-size: 16px;
 }
 
 .center {
   text-align: center;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .input-credit {

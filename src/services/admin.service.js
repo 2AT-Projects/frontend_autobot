@@ -1,6 +1,7 @@
 import http from "../http-common";
 import authHeader from './auth-header';
 
+
 class UserDataService {
     getAll() {
         return http.get("/users", { headers: authHeader() });
@@ -25,7 +26,7 @@ class UserDataService {
     deleteAll() {
         return http.delete(`/users`, { headers: authHeader() });
     }
-    
+
     findByUserUfabetName(user_ufabet) {
         return http.get(`/users?user_ufabet=${user_ufabet}`, { headers: authHeader() });
     }

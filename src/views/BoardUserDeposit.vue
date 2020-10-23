@@ -12,7 +12,8 @@
           <img
             src="https://www.jobthaiweb.com/company/picture/matawin1983_logo.gif"
             class="img-icon rounded-circle"
-            alt="" style="width:20%"
+            alt=""
+            style="width: 20%"
           />
           <div class="flex-grow-1" style="padding-left: 8px; text-align: right">
             <div>
@@ -27,12 +28,12 @@
                 letter-spacing: 3px;
               "
             >
-              <font color="white">{{ content.acc_number }}</font>
+              <font color="white">{{ bank_detail.acc_number }}</font>
             </div>
-            <div class="font14 mt-2">{{ content.bank_type }}</div>
-            <div class="font14">{{ content.acc_name }}</div>
+            <div class="font14 mt-2">{{ bank_detail.bank_type }}</div>
+            <div class="font14">{{ bank_detail.acc_name }}</div>
             <span
-              class="btn btn-primary btn-scb btn-sm justify-content-end copy-data"
+              class="btn btn-success btn-scb btn-sm justify-content-end copy-data"
               @click="copyTestingCode()"
               >คัดลอกเลขบัญชี</span
             >
@@ -74,12 +75,17 @@
               <th>สถานะ</th>
             </tr>
           </thead>
-          <tbody v-if="merged.length > 0">
-            <tr v-for="(item, i) in merged" :key="i">
+          <tbody v-if="content.length > 0">
+            <tr v-for="(item, i) in content" :key="i">
               <td>{{ item.time }}</td>
               <td>{{ item.date }}</td>
               <td>เติมเงิน {{ item.deposit }} บาท</td>
-              <td>{{ item.status }}</td>
+              <td v-if="item.status == 0">
+                <p class="alert-warning">กำลังดำเนินการ</p>
+              </td>
+              <td v-else>
+                <p class="alert-success">ดำเนินการเสร็จสิ้น</p>
+              </td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -97,15 +103,15 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import UserService from "../services/user.service";
 
 export default {
-  name: 'Deposit',
+  name: "Deposit",
   data() {
     return {
-      content: '',
-      merged: [],
+      content: [],
       copy_code: null,
+      bank_detail: [],
     };
   },
   computed: {
@@ -115,29 +121,30 @@ export default {
   },
   methods: {
     copyTestingCode() {
-      let testingCodeToCopy = document.querySelector('#testing-code');
-      testingCodeToCopy.setAttribute('type', 'text'); // hidden
+      let testingCodeToCopy = document.querySelector("#testing-code");
+      testingCodeToCopy.setAttribute("type", "text"); // hidden
       testingCodeToCopy.select();
 
       try {
-        const successful = document.execCommand('copy');
-        const msg = successful ? 'สำเร็จ' : 'ไม่สำเร็จ';
+        const successful = document.execCommand("copy");
+        const msg = successful ? "สำเร็จ" : "ไม่สำเร็จ";
         this.copy_code = `คัดลอกหมายเลขบัญชี${msg}`;
         // alert("Testing code was copied " + msg);
       } catch (err) {
         // alert("Oops, unable to copy");
-        this.copy_code = 'Oops, unable to copy';
+        this.copy_code = "Oops, unable to copy";
       }
 
       /* unselect the range */
-      testingCodeToCopy.setAttribute('type', 'hidden');
+      testingCodeToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
     },
+
     getDepositList() {
       UserService.getUserDepositList().then(
         (response) => {
-          const list = response.data.datas;
-          this.mergedStatus(list);
+          this.content = response.data.datas;
+          // this.mergedStatus(list);
         },
         (error) => {
           this.content =
@@ -149,31 +156,14 @@ export default {
         }
       );
     },
-    mergedStatus(list) {
-      const obj = {
-        0: 'กำลังดำเนินการ',
-        1: 'ดำเนินการเสร็จสิ้น',
-      };
-      const status = [];
-      list.forEach((element) => {
-        const st = obj[element['status']];
-        status.push({ status: st });
-      });
 
-      for (let i = 0; i < list.length; i++) {
-        this.merged.push({
-          ...list[i],
-          ...status[i],
-        });
-      }
-    },
     getBank() {
       UserService.getUserBoard().then(
         (response) => {
-          this.content = response.data;
+          this.bank_detail = response.data;
         },
         (error) => {
-          this.content =
+          this.bank_detail =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -185,7 +175,7 @@ export default {
   },
   mounted() {
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
     this.getDepositList();
     this.getBank();

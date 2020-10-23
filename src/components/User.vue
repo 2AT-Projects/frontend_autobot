@@ -88,7 +88,7 @@ export default {
       UserDataService.update(this.currentUser.id, this.currentUser)
         .then((response) => {
           console.log(response);
-          this.message = 'The tutorial was updated successfully!';
+          this.message = 'The User was updated successfully!';
         })
         .catch((e) => {
           console.log(e);

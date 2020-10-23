@@ -57,6 +57,11 @@ export const router = new Router({
             component: () => import('./views/BoardAdminUser.vue')
         },
         {
+            path: '/admin/withdraw',
+            name: 'admin-withdraw',
+            component: () => import('./views/AdminWithdraw.vue')
+        },
+        {
             path: '/admin/users/:id',
             name: 'admin-user-details',
             component: () => import('./components/User.vue')

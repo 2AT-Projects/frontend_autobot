@@ -37,7 +37,12 @@
           <td>{{ item.bank }}</td>
           <td>{{ item.bank_number }}</td>
           <td>เติมเงิน {{ item.deposit }} บาท</td>
-          <td>{{ item.status }}</td>
+          <td v-if="item.status == 0">
+            <p class="alert-wraning">รอดำเนินการ</p>
+          </td>
+          <td v-else>
+            <p class="alert-success">เติมเงินสำเร็จ</p>
+          </td>
         </tr>
       </tbody>
       <tbody v-else>
@@ -55,14 +60,14 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
-import moment from 'moment';
-import DatePicker from 'vuejs-datepicker';
-import { en, es, th } from 'vuejs-datepicker/dist/locale';
-import User from '../models/user';
+import UserService from "../services/user.service";
+import moment from "moment";
+import DatePicker from "vuejs-datepicker";
+import { en, es, th } from "vuejs-datepicker/dist/locale";
+import User from "../models/user";
 
 export default {
-  name: 'adminScbDeposit',
+  name: "adminScbDeposit",
   components: {
     DatePicker,
   },
@@ -70,8 +75,8 @@ export default {
     return {
       th: th,
       content: [],
-      sum: '',
-      sumToday: '',
+      sum: "",
+      sumToday: "",
       toDay: new Date(),
       startDate: new Date(),
       toDate: new Date(),
@@ -91,7 +96,7 @@ export default {
     },
 
     getDepositToday() {
-      const toDayString = moment(this.toDay).format('YYYY-MM-DD');
+      const toDayString = moment(this.toDay).format("YYYY-MM-DD");
       UserService.getAdminScbDepositToDay(toDayString)
         .then((res) => {
           const data = res.data.datas;
@@ -128,8 +133,8 @@ export default {
     },
 
     searchDepositFromDate() {
-      const startDateString = moment(this.startDate).format('YYYY-MM-DD');
-      const toDateString = moment(this.toDate).format('YYYY-MM-DD');
+      const startDateString = moment(this.startDate).format("YYYY-MM-DD");
+      const toDateString = moment(this.toDate).format("YYYY-MM-DD");
 
       let startDate = startDateString;
       let toDate = toDateString;
@@ -158,7 +163,7 @@ export default {
     this.getDepositToday();
     this.getTransectionsFromScb();
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   },
 };

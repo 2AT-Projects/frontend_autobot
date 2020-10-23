@@ -22,10 +22,11 @@ import {
   faIdCard,
   faBullhorn,
   faEdit,
-  faTrash
+  faTrash,
+  faSync
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faPhone, faUserLock, faIdCard, faBullhorn, faEdit, faTrash);
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faPhone, faUserLock, faIdCard, faBullhorn, faEdit, faTrash, faSync);
 
 Vue.config.productionTip = false;
 
