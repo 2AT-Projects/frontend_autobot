@@ -9,11 +9,10 @@
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Username</label>
-          <input
+          <b-input
             v-model="user.username"
             v-validate="'required'"
             type="text"
-            class="form-control"
             name="username"
           />
           <div
@@ -26,11 +25,10 @@
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input
+          <b-input
             v-model="user.password"
             v-validate="'required'"
             type="password"
-            class="form-control"
             name="password"
           />
           <div
@@ -42,18 +40,25 @@
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <b-button  
+          class="btn-block" 
+          :disabled="loading"
+          type="is-success" 
+          outlined
+          >
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
             ></span>
             <span>Login</span>
-          </button>
+          </b-button>
         </div>
-        <a
+        <b-button
           href="/register"
-          class="btn btn-primary btn-block"
+          class="btn-block"
           :disabled="loading"
+          type="is-success" 
+          outlined
         >
           <span
             v-show="loading"
@@ -61,7 +66,7 @@
           ></span>
           <!-- <a href="/register"> Register</a> -->
           <span>Register</span>
-        </a>
+        </b-button>
         <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">
             {{ message }}
@@ -73,15 +78,15 @@
 </template>
 
 <script>
-import User from '../models/user';
+import User from "../models/user";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-      user: new User('', ''),
+      user: new User("", ""),
       loading: false,
-      message: '',
+      message: "",
     };
   },
   computed: {
@@ -91,11 +96,12 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push("/profile");
     }
   },
   methods: {
     handleLogin() {
+      console.log('test');
       this.loading = true;
       this.$validator.validateAll().then((isValid) => {
         if (!isValid) {
@@ -104,9 +110,9 @@ export default {
         }
 
         if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
+          this.$store.dispatch("auth/login", this.user).then(
             () => {
-              this.$router.push('/profile');
+              this.$router.push("/profile");
             },
             (error) => {
               this.loading = false;
@@ -134,6 +140,7 @@ label {
 .card-container.card {
   max-width: 400px !important;
   padding: 40px 40px;
+  background-color: black;
 }
 
 .card {
