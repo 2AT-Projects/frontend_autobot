@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <withdrawList />
   </div>
 </template>
@@ -14,6 +14,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

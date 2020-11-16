@@ -1,8 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8080/api/app';
-const API_URL_1 = 'http://localhost:8080/api/agent';
+const API_URL = 'http://api-ufaautoapp.herokuapp.com/api/app';
 
 class UserService {
     getPublicContent() {
@@ -14,7 +13,7 @@ class UserService {
     }
 
     getUserDepositList() {
-        return axios.get(`${API_URL}/user/deposit-list`, { headers: authHeader() });
+        return axios.get(`${API_URL}/user/deposit/list`, { headers: authHeader() });
     }
 
     getUserBalanceFromUfabet() {
@@ -26,7 +25,7 @@ class UserService {
     }
 
     getUserWithdrawList() {
-        return axios.get(`${API_URL}/user/withdraw-list`, { headers: authHeader() })
+        return axios.get(`${API_URL}/user/withdraw/list`, { headers: authHeader() })
     }
 
     getModeratorBoard() {
@@ -38,11 +37,11 @@ class UserService {
     }
 
     getAdminScbDeposit() {
-        return axios.get(`${API_URL}/admin/scb-deposit-list`, { headers: authHeader() })
+        return axios.get(`${API_URL}/admin/scb/deposit/list`, { headers: authHeader() })
     }
 
     getAdminScbDepositBetweenDate(startDate, toDate) {
-        return axios.get(`${API_URL}/admin/scb-deposit-date`, {
+        return axios.get(`${API_URL}/admin/scb/deposit/`, {
             headers: authHeader(),
             params: {
                 startDate: startDate,
@@ -52,7 +51,7 @@ class UserService {
     }
 
     getAdminScbDepositToDay(today) {
-        return axios.get(`${API_URL}/admin/scb-deposit-today`, {
+        return axios.get(`${API_URL}/admin/scb/deposit/today`, {
             headers: authHeader(),
             params: {
                 toDay: today
@@ -60,12 +59,28 @@ class UserService {
         });
     }
 
-    getAdminQueTransfer() {
-        return axios.get(`${API_URL_1}/topup`, { headers: authHeader() })
+
+    getAdminWithdraw(params) {
+        return axios.get(`${API_URL}/admin/withdraw`, {
+            headers: authHeader(),
+            params: params
+        })
     }
 
-    getAdminWithdraw() {
-        return axios.get(`${API_URL}/admin/withdraw-list`, { headers: authHeader() })
+    getAdminWithdrawByStatus(params) {
+        return axios.get(`${API_URL}/admin/withdraw/status`, {
+            headers: authHeader(),
+            params: params
+        })
+    }
+
+    getAdminWithdrawToDay(today) {
+        return axios.get(`${API_URL}/admin/withdraw/today`, {
+            headers: authHeader(),
+            params: {
+                toDay: today
+            }
+        });
     }
 
     updateStatus(ob) {

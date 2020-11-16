@@ -53,7 +53,19 @@
               >ถอน</router-link
             >
           </li>
+          <li class="nav-item">
+            <router-link
+              v-if="showUserBoard"
+              to="/codeitem"
+              class="nav-link"
+            ></router-link>
+          </li>
         </div>
+        
+        <!-- afbvip@afb888vip.com -->
+        <!-- s$W4$KVgx8~U -->
+        <!-- admin -->
+        <!-- l9vJ&VuSy&0g -->
 
         <div v-if="!currentUser" class="navbar-nav ml-auto">
           <li class="nav-item">

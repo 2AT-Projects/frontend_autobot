@@ -3,8 +3,8 @@ import authHeader from './auth-header';
 
 
 class UserDataService {
-    getAll() {
-        return http.get("/users", { headers: authHeader() });
+    getAll(params) {
+        return http.get("/users", { headers: authHeader(), params: params });
     }
 
     get(id) {

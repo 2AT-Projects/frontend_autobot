@@ -61,6 +61,32 @@
       </p>
     </div>
 
+    <div>
+      <b-form v-on:submit.prevent="deposit">
+        <b-form-group>
+          <b-form-input
+            v-model="time"
+            placeholder="time"
+            type="time"
+          ></b-form-input>
+          <b-form-input v-model="credit" placeholder="credit"></b-form-input>
+          <b-form-file v-model="file" @change="onFileChange"></b-form-file>
+          <div id="preview">
+            <div class="text-center">
+              <b-spinner
+                v-show="loading"
+                variant="warning"
+                label="Text Centered"
+              ></b-spinner>
+            </div>
+            <img v-if="url" :src="url" />
+            {{ this.url }}
+          </div>
+          <b-button type="submit">ยืนยัน</b-button>
+        </b-form-group>
+      </b-form>
+    </div>
+
     <footer class="mt-5 cen">
       <div>
         <h4 class="text-left">5 รายการฝากล่าสุด</h4>
@@ -105,6 +131,7 @@
 
 <script>
 import UserService from "../services/user.service";
+import moment from "moment";
 
 export default {
   name: "Deposit",
@@ -113,6 +140,12 @@ export default {
       content: [],
       copy_code: null,
       bank_detail: [],
+      infoDeposit: {},
+      credit: "",
+      time: "",
+      file: null,
+      url: null,
+      loading: false,
     };
   },
   computed: {
@@ -121,6 +154,18 @@ export default {
     },
   },
   methods: {
+    async onFileChange(e) {
+      this.loading = true;
+      try {
+        setTimeout(() => {
+          this.loading = false;
+          const file = e.target.files[0];
+          this.url = URL.createObjectURL(file);
+        }, 500);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     copyTestingCode() {
       let testingCodeToCopy = document.querySelector("#testing-code");
       testingCodeToCopy.setAttribute("type", "text"); // hidden
@@ -173,6 +218,25 @@ export default {
         }
       );
     },
+
+    deposit() {
+      const toDay = new Date();
+      const newDate = moment(toDay).format("DD/MM/YYYY");
+      
+      this.infoDeposit = {
+        time: this.time,
+        date: newDate,
+        credit: this.credit,
+        imgUrl: this.url,
+        userDetail: {
+          fist_name: this.currentUser.first_name,
+          last_name: this.currentUser.last_name,
+          bank_type: this.currentUser.bank,
+          bank_number: this.currentUser.bank_number,
+        },
+      };
+      console.log(this.infoDeposit);
+    },
   },
   mounted() {
     if (!this.currentUser) {
@@ -212,5 +276,15 @@ export default {
 }
 .font1 {
   text-align: center;
+}
+#preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#preview img {
+  max-width: 100%;
+  max-height: 500px;
 }
 </style>

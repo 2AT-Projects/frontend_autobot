@@ -38,10 +38,7 @@
 
               <b-input-group-append>
                 <b-button type="submit" variant="warning" :disabled="loading"
-                  ><span
-                    v-show="loading"
-                    class="spinner-border spinner-border-sm"
-                  ></span>
+                  ><b-spinner v-show="loading" small type="grow"></b-spinner>
                   <span>ยืนยัน</span>
                 </b-button>
               </b-input-group-append>

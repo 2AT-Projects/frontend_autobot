@@ -4,11 +4,27 @@
       <h3>รายการเงินเข้า (SCB)</h3>
     </header>
 
-    <div class="input-group mt-4">
-      <span>from: </span><date-picker :language="th" v-model="startDate" />
-      <span>to: </span><date-picker :language="th" v-model="toDate" />
-      <button @click="searchDepositFromDate">search</button>
+    {{ message }}
+
+    <div class="mt-4">
+      <b-input-group>
+        <b-button-group class="">
+          <b-button variant="warning" @click="startGetDepositFromScb()"
+            >ดึงข้อมูลจากธนาคาร</b-button
+          >
+          <b-button variant="info" @click="getDepositToday"
+            >รายการวันนี้</b-button
+          >
+        </b-button-group>
+        <b-button-group class="col-7">
+          <span>from: </span><date-picker :language="th" v-model="startDate" />
+          <span>to: </span><date-picker :language="th" v-model="toDate" />
+          <b-button @click="searchDepositFromDate">search</b-button>
+        </b-button-group>
+      </b-input-group>
     </div>
+
+    <div class="input-group mt-4"></div>
 
     <div class="jumbotron mt-4 cen card-jum">
       <p class="tx-sz">
@@ -61,6 +77,7 @@
 
 <script>
 import UserService from "../services/user.service";
+import RobotService from "../services/robot.service";
 import moment from "moment";
 import DatePicker from "vuejs-datepicker";
 import { en, es, th } from "vuejs-datepicker/dist/locale";
@@ -75,6 +92,7 @@ export default {
     return {
       th: th,
       content: [],
+      message: "",
       sum: "",
       sumToday: "",
       toDay: new Date(),
@@ -95,11 +113,24 @@ export default {
       return sum;
     },
 
+    startGetDepositFromScb() {
+      RobotService.getDepositFromScb()
+        .then((res) => {
+          this.message = res.data.message;
+          console.log(this.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     getDepositToday() {
       const toDayString = moment(this.toDay).format("YYYY-MM-DD");
       UserService.getAdminScbDepositToDay(toDayString)
         .then((res) => {
           const data = res.data.datas;
+          this.content = data;
+
           const arr = [];
           data.forEach((element) => {
             const credit = Number(element.deposit);
@@ -156,6 +187,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+
+      // this.startDate = new Date;
+      // this.toDate = new Date
     },
   },
 
