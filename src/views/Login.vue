@@ -1,51 +1,36 @@
 <template>
   <div class="col-md-12">
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <form name="form" @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <b-input
-            v-model="user.username"
-            v-validate="'required'"
-            type="text"
+      <div>
+        <h2 class="cen">Login</h2>
+      </div>
+
+      <b-form @submit.prevent="handleLogin">
+        <b-form-group id="text-username" label="Username:" label-for="username">
+          <b-form-input
+            id="text-username"
             name="username"
-          />
-          <div
-            v-if="errors.has('username')"
-            class="alert alert-danger"
-            role="alert"
-          >
-            Username is required!
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
+            required
+            type="text"
+            v-model="user.username"
+            placeholder="Enter Username"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="text-password" label="Password:" label-for="password">
           <b-input
-            v-model="user.password"
-            v-validate="'required'"
-            type="password"
+            id="text-password"
             name="password"
-          />
-          <div
-            v-if="errors.has('password')"
-            class="alert alert-danger"
-            role="alert"
-          >
-            Password is required!
-          </div>
-        </div>
+            type="password"
+            v-model="user.password"
+            placeholder="Enter Username"
+            required
+            aria-describedby="password-help-block"
+          ></b-input>
+        </b-form-group>
+
         <div class="form-group">
-          <b-button  
-          class="btn-block" 
-          :disabled="loading"
-          type="is-success" 
-          outlined
-          >
+          <b-button type="submit" variant="warning" block :disabled="loading">
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -53,26 +38,18 @@
             <span>Login</span>
           </b-button>
         </div>
-        <b-button
-          href="/register"
-          class="btn-block"
-          :disabled="loading"
-          type="is-success" 
-          outlined
-        >
-          <span
-            v-show="loading"
-            class="spinner-border spinner-border-sm"
-          ></span>
+
+        <a href="/register" class="btn btn-primary btn-block">
           <!-- <a href="/register"> Register</a> -->
           <span>Register</span>
-        </b-button>
-        <div class="form-group">
+        </a>
+
+        <div class="form-group mt-3">
           <div v-if="message" class="alert alert-danger" role="alert">
             {{ message }}
           </div>
         </div>
-      </form>
+      </b-form>
     </div>
   </div>
 </template>
@@ -141,6 +118,10 @@ label {
   max-width: 400px !important;
   padding: 40px 40px;
   background-color: black;
+}
+
+.cen {
+  text-align: center;
 }
 
 .card {

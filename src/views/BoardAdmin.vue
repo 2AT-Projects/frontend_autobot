@@ -5,9 +5,13 @@
       <!-- {{ list }} -->
     </header>
 
+    <div>
+      <b-button @click="topUp">Top Up</b-button>
+    </div>
+    {{ message }}
     <div class="">
       <h4 class="text-left">รายการเติมเงิน</h4>
-      <hr/>
+      <hr />
     </div>
 
     <div v-for="item in list" :key="item.idx">
@@ -20,22 +24,37 @@
         <p><strong>เติมเครดิต:</strong> {{ item.credit }} บาท</p>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import UserService from "../services/user.service";
+import RobotService from "../services/robot.service";
 
 export default {
-  name: 'Admin',
+  name: "Admin",
   data() {
     return {
-      content: '',
+      content: "",
+      message: "",
       list: [],
     };
   },
   methods: {
+    topUp() {
+      RobotService.topUp()
+        .then((res) => {
+          const data = res.data.data;
+          console.log(data);
+          data.forEach((element) => {
+            this.list.push(element);
+          });
+          this.message = res.data.message;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getTransections() {
       UserService.getAdminQueTransfer().then(
         (res) => {
@@ -76,7 +95,7 @@ export default {
   },
   mounted() {
     this.getDashboard();
-    this.getTransections();
+    // this.getTransections();
     this.setBalance();
   },
 };

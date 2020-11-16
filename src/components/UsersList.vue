@@ -21,12 +21,38 @@
           </button>
         </div>
       </div>
+
+      <div class="mt-3">
+        <b-button-group>
+          <b-button variant="warning" @click="getUserFromUfabet"
+            >get user data</b-button
+          >
+          <b-button variant="danger" @click="stopTimer">stop get data</b-button>
+        </b-button-group>
+      </div>
+
+      <div class="mt-3">
+        <div v-if="message" class="alert alert-success" role="success">
+          {{ message }}
+        </div>
+      </div>
+
+      <div class="mt-3">
+        Items per Page:
+        <select v-model="pageSize" @change="handlePageSizeChange($event)">
+          <option v-for="size in pageSizes" :key="size" :value="size">
+            {{ size }}
+          </option>
+        </select>
+      </div>
     </div>
-    <div class="">
+
+    <div class="mt-3">
       <h4>รายชื่อสมาชิก</h4>
       <table class="table table-hover">
         <thead class="">
           <tr>
+            <th>id</th>
             <th>ชื่อ-สกุล</th>
             <th>username_ufa</th>
             <th>username</th>
@@ -44,6 +70,7 @@
             :key="i"
             @click="setActiveUser(item, i)"
           >
+            <td>{{ item.id }}</td>
             <td>{{ item.first_name }} {{ item.last_name }}</td>
             <td>{{ item.user_ufabet }}</td>
             <td>{{ item.username }}</td>
@@ -90,6 +117,15 @@
         Remove All
       </button> -->
     </div>
+    <div class="col-md-12">
+      <b-pagination
+        v-model="page"
+        :total-rows="count"
+        :per-page="pageSize"
+        @change="handlePageChange"
+        pills
+      ></b-pagination>
+    </div>
     <div class="">
       <div v-if="currentUser">
         <h4>user</h4>
@@ -118,22 +154,89 @@
 </template>
 
 <script>
-import UserDataService from '../services/admin.service';
+import UserDataService from "../services/admin.service";
+import RobotService from "../services/robot.service";
+
 export default {
-  name: 'UserList',
+  name: "UserList",
   data() {
     return {
       users: [],
       currentUser: null,
       currentIndex: -1,
-      user_ufabet: '',
+      user_ufabet: "",
+      message: "",
+
+      page: 1,
+      count: 0,
+      pageSize: 5,
+
+      pageSizes: [5, 10, 30],
     };
   },
   methods: {
+    getRequestParams(username, page, pageSize) {
+      let params = {};
+
+      if (username) {
+        params["user_ufabet"] = username;
+      }
+
+      if (page) {
+        params["page"] = page - 1;
+      }
+
+      if (pageSize) {
+        params["size"] = pageSize;
+      }
+
+      return params;
+    },
+
+    handlePageChange(value) {
+      this.page = value;
+      this.retrieveUser();
+    },
+
+    handlePageSizeChange(event) {
+      this.pageSize = event.target.value;
+      this.page = 1;
+      this.retrieveUser();
+    },
+
+    getUserFromUfabet() {
+      RobotService.getUserDataFromUfabetAgent()
+        .then((res) => {
+          this.message = res.data.message;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    stopTimer() {
+      RobotService.stopTimerAgent()
+        .then((res) => {
+          this.message = res.data.message;
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     retrieveUser() {
-      UserDataService.getAll()
+      const params = this.getRequestParams(
+        this.user_ufabet,
+        this.page,
+        this.pageSize
+      );
+      UserDataService.getAll(params)
         .then((response) => {
-          this.users = response.data;
+          const { users, totalItems } = response.data;
+          this.users = users;
+          this.count = totalItems;
+          console.log(totalItems);
           console.log(this.users);
         })
         .catch((e) => {
@@ -153,7 +256,7 @@ export default {
     },
 
     editUser(id) {
-      this.$router.push({ name: 'admin-user-details', params: { id: id } });
+      this.$router.push({ name: "admin-user-details", params: { id: id } });
     },
 
     deleteUser(id) {
@@ -180,8 +283,9 @@ export default {
     searchTitle() {
       UserDataService.findByUserUfabetName(this.user_ufabet)
         .then((response) => {
-          this.users = response.data;
-          console.log(response.data);
+          const { users } = response.data;
+          this.users = users;
+          console.log(users);
         })
         .catch((e) => {
           console.log(e);

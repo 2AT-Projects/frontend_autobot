@@ -28,6 +28,11 @@
               >จัดการสมาชิก (Ufabet)
             </router-link>
           </li>
+          <li v-if="showAdminBoard" class="nav-item">
+            <router-link to="/admin/withdraw" class="nav-link"
+              >รายการถอนเงิน
+            </router-link>
+          </li>
           <li v-if="showModeratorBoard" class="nav-item">
             <router-link to="/mod" class="nav-link"
               >Moderator Board</router-link
@@ -48,7 +53,19 @@
               >ถอน</router-link
             >
           </li>
+          <li class="nav-item">
+            <router-link
+              v-if="showUserBoard"
+              to="/codeitem"
+              class="nav-link"
+            ></router-link>
+          </li>
         </div>
+        
+        <!-- afbvip@afb888vip.com -->
+        <!-- s$W4$KVgx8~U -->
+        <!-- admin -->
+        <!-- l9vJ&VuSy&0g -->
 
         <div v-if="!currentUser" class="navbar-nav ml-auto">
           <li class="nav-item">
@@ -93,14 +110,14 @@ export default {
     },
     showUserBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_USER');
+        return this.currentUser.roles.includes("ROLE_USER");
       }
 
       return false;
     },
     showAdminBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_ADMIN');
+        return this.currentUser.roles.includes("ROLE_ADMIN");
       }
 
       return false;
@@ -108,7 +125,7 @@ export default {
 
     showModeratorBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_MODERATOR');
+        return this.currentUser.roles.includes("ROLE_MODERATOR");
       }
 
       return false;
@@ -116,8 +133,8 @@ export default {
   },
   methods: {
     logOut() {
-      this.$store.dispatch('auth/logout');
-      this.$router.push('/login');
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
     },
   },
 };
@@ -125,13 +142,14 @@ export default {
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: myFirstFont;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   color: #2c3e50;
   /* background-image: linear-gradient(#313131, #0a0a0a); */
   height: 100vh;
+  
 }
 /* .background{
   background-color: rgba(0, 0, 0, 0.74);
@@ -166,7 +184,7 @@ export default {
   padding: 0px 10px;
 }
 
-@media screen and (max-height: 450px) {
+@media screen and (max-height: 768px) {
   .sidenav {
     padding-top: 15px;
   }
@@ -174,4 +192,28 @@ export default {
     font-size: 18px;
   }
 }
+
+.background{
+  background-image: url("assets/bg.jpg");
+   /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+
+  /* Preserve aspet ratio */
+  min-width: 100%;
+  min-height: 100%;
+}
+
+@font-face {
+   font-family: myFirstFont;
+   src: url("../font/Cloud-Light.ttf");
+}
+
 </style>

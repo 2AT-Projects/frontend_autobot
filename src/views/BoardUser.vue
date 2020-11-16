@@ -5,12 +5,41 @@
         <h4 class="text-left">เดรดิตคงเหลือ</h4>
         <hr />
       </div>
-      <div v-if="content" class="jumbotron font15 grad">
-        {{ content.balance }} {{ content.currency }}
+
+      <div class="circletop">
+        <span class="font15">ยอดเงินที่ใช้ได้</span>
+        <!-- <h2 class="tx">{{ balance }}</h2> -->
+        <span
+          v-show="loading_balance"
+          class="spinner-border spinner-border-md"
+        ></span>
+        <h2 class="tx" v-if="loading_balance == false">{{ balance }}</h2>
       </div>
-      <div v-else class="jumbotron font15 grad">รอสักครู่...</div>
+
+      <div class="elem mt-4">
+        <span class="icon">
+          <font-awesome-icon
+            class="pointer"
+            @click="refreshBalance"
+            icon="sync"
+          />
+        </span>
+        <span> ดึงข้อมูล เวลา {{ time }}</span>
+      </div>
+
+      <!-- <div v-if="balance" class="jumbotron font15 grad elem mt-5">
+        <div class="icon">
+          <font-awesome-icon
+            class="pointer"
+            @click="refreshBalance"
+            icon="sync"
+          />
+        </div>
+        <span> {{ balance }} ฿ </span>
+      </div>
+      <div v-else class="jumbotron font15 grad">0.00 ฿</div> -->
     </div>
-    <div class="mt-5">
+    <div class="mt-4">
       <div>
         <h4 class="text-left">เข้าเล่นเกมส์</h4>
         <hr />
@@ -65,13 +94,18 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import UserService from "../services/user.service";
+import moment from "moment";
 
 export default {
-  name: 'User',
+  name: "User",
   data() {
     return {
-      content: '',
+      content: "",
+      time: new Date(),
+      balance: "",
+      currentIndex: -1,
+      loading_balance: false,
     };
   },
   computed: {
@@ -80,25 +114,38 @@ export default {
     },
   },
   methods: {
+    refreshBalance() {
+      this.getBalance();
+      this.getTime();
+      this.currentIndex = -1;
+    },
     getBalance() {
-      UserService.getUserBalanceFromUserbet().then(
-        (response) => {
-          this.content = response.data.credit;
-        },
-        (error) => {
-          this.content =
+      this.loading_balance = true;
+      UserService.getUserBalanceFromUfabet()
+        .then(async (response) => {
+          this.loading_balance = false;
+          this.balance = response.data.credit.balance;
+        })
+        .catch((err) => {
+          this.loading_balance = false;
+          this.balance =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
             error.message ||
             error.toString();
-        }
-      );
+        });
+    },
+    getTime() {
+      const date = new Date();
+      const newTime = moment(date, ["h:mm A"]).format("HH:mm");
+      this.time = newTime;
     },
   },
   mounted() {
+    this.getTime();
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
     this.getBalance();
   },
@@ -107,7 +154,43 @@ export default {
 
 <style scoped>
 .font15 {
-  font-size: 24px;
+  font-size: 15px;
   text-align: center;
+}
+.tx {
+  text-align: center;
+}
+.pointer {
+  cursor: pointer;
+}
+
+.elem {
+  text-align: center;
+}
+
+.icon {
+  text-align: center;
+}
+
+.circletop {
+  /* circle styles */
+  /* position: relative; */
+  width: 300px;
+  height: 300px;
+  font-family: Raleway;
+  border: 1px solid rgba(223, 223, 223, 0.897);
+  border-radius: 50%;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgb(99, 99, 99);
+
+  /* become a flex container */
+  /* its children will be flex items */
+  display: flex;
+  /* place items in column */
+  flex-direction: column;
+  /* center flex items horizontally */
+  align-items: center;
+  /* center all content vertically */
+  justify-content: center;
 }
 </style>

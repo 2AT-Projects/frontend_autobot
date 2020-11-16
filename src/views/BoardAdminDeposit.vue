@@ -4,11 +4,27 @@
       <h3>รายการเงินเข้า (SCB)</h3>
     </header>
 
-    <div class="input-group mt-4">
-      <span>from: </span><date-picker :language="th" v-model="startDate" />
-      <span>to: </span><date-picker :language="th" v-model="toDate" />
-      <button @click="searchDepositFromDate">search</button>
+    {{ message }}
+
+    <div class="mt-4">
+      <b-input-group>
+        <b-button-group class="">
+          <b-button variant="warning" @click="startGetDepositFromScb()"
+            >ดึงข้อมูลจากธนาคาร</b-button
+          >
+          <b-button variant="info" @click="getDepositToday"
+            >รายการวันนี้</b-button
+          >
+        </b-button-group>
+        <b-button-group class="col-7">
+          <span>from: </span><date-picker :language="th" v-model="startDate" />
+          <span>to: </span><date-picker :language="th" v-model="toDate" />
+          <b-button @click="searchDepositFromDate">search</b-button>
+        </b-button-group>
+      </b-input-group>
     </div>
+
+    <div class="input-group mt-4"></div>
 
     <div class="jumbotron mt-4 cen card-jum">
       <p class="tx-sz">
@@ -37,7 +53,12 @@
           <td>{{ item.bank }}</td>
           <td>{{ item.bank_number }}</td>
           <td>เติมเงิน {{ item.deposit }} บาท</td>
-          <td>{{ item.status }}</td>
+          <td v-if="item.status == 0">
+            <p class="alert-warning">รอดำเนินการ</p>
+          </td>
+          <td v-else>
+            <p class="alert-success">เติมเงินสำเร็จ</p>
+          </td>
         </tr>
       </tbody>
       <tbody v-else>
@@ -55,14 +76,15 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
-import moment from 'moment';
-import DatePicker from 'vuejs-datepicker';
-import { en, es, th } from 'vuejs-datepicker/dist/locale';
-import User from '../models/user';
+import UserService from "../services/user.service";
+import RobotService from "../services/robot.service";
+import moment from "moment";
+import DatePicker from "vuejs-datepicker";
+import { en, es, th } from "vuejs-datepicker/dist/locale";
+import User from "../models/user";
 
 export default {
-  name: 'adminScbDeposit',
+  name: "adminScbDeposit",
   components: {
     DatePicker,
   },
@@ -70,8 +92,9 @@ export default {
     return {
       th: th,
       content: [],
-      sum: '',
-      sumToday: '',
+      message: "",
+      sum: "",
+      sumToday: "",
       toDay: new Date(),
       startDate: new Date(),
       toDate: new Date(),
@@ -90,11 +113,24 @@ export default {
       return sum;
     },
 
+    startGetDepositFromScb() {
+      RobotService.getDepositFromScb()
+        .then((res) => {
+          this.message = res.data.message;
+          console.log(this.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     getDepositToday() {
-      const toDayString = moment(this.toDay).format('YYYY-MM-DD');
+      const toDayString = moment(this.toDay).format("YYYY-MM-DD");
       UserService.getAdminScbDepositToDay(toDayString)
         .then((res) => {
           const data = res.data.datas;
+          this.content = data;
+
           const arr = [];
           data.forEach((element) => {
             const credit = Number(element.deposit);
@@ -128,8 +164,8 @@ export default {
     },
 
     searchDepositFromDate() {
-      const startDateString = moment(this.startDate).format('YYYY-MM-DD');
-      const toDateString = moment(this.toDate).format('YYYY-MM-DD');
+      const startDateString = moment(this.startDate).format("YYYY-MM-DD");
+      const toDateString = moment(this.toDate).format("YYYY-MM-DD");
 
       let startDate = startDateString;
       let toDate = toDateString;
@@ -151,6 +187,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+
+      // this.startDate = new Date;
+      // this.toDate = new Date
     },
   },
 
@@ -158,7 +197,7 @@ export default {
     this.getDepositToday();
     this.getTransectionsFromScb();
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   },
 };
