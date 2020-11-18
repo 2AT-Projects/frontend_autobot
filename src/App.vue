@@ -1,109 +1,96 @@
 <template>
   <div id="app" class="background">
-    <!-- <div v-if="showAdminBoard" class="sidenav">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#clients">Clients</a>
-      <a href="#contact">Contact</a>
-    </div> -->
-    <div class="">
-      <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
-        <a href class="navbar-brand" @click.prevent>autobet</a>
-        <div class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <router-link to="/home" class="nav-link">
-              <font-awesome-icon icon="home" />หน้าแรก
-            </router-link>
-          </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin" class="nav-link">แผงควมคุม</router-link>
-          </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin/scb-deposit" class="nav-link"
-              >รายการฝาก(SCB)
-            </router-link>
-          </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin/users" class="nav-link"
-              >จัดการสมาชิก (Ufabet)
-            </router-link>
-          </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin/withdraw" class="nav-link"
-              >รายการถอนเงิน
-            </router-link>
-          </li>
-          <li v-if="showModeratorBoard" class="nav-item">
-            <router-link to="/mod" class="nav-link"
-              >Moderator Board</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link v-if="showUserBoard" to="/user" class="nav-link"
-              >กระเป๋าตัง</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link v-if="showUserBoard" to="/deposit" class="nav-link"
-              >ฝาก</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link v-if="showUserBoard" to="/withdraw" class="nav-link"
-              >ถอน</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link
-              v-if="showUserBoard"
-              to="/codeitem"
-              class="nav-link"
-            ></router-link>
-          </li>
-        </div>
-        
-        <!-- afbvip@afb888vip.com -->
-        <!-- s$W4$KVgx8~U -->
-        <!-- admin -->
-        <!-- l9vJ&VuSy&0g -->
+    <b-navbar toggleable="lg" type="dark">
+      <b-navbar-brand href="#">AUTOBET</b-navbar-brand>
 
-        <div v-if="!currentUser" class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <router-link to="/register" class="nav-link">
-              <font-awesome-icon icon="user-plus" />Sign Up
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/login" class="nav-link">
-              <font-awesome-icon icon="sign-in-alt" />Login
-            </router-link>
-          </li>
-        </div>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <div v-if="currentUser" class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
-              <font-awesome-icon icon="user" />
-              {{ currentUser.username }}
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href @click.prevent="logOut">
-              <font-awesome-icon icon="sign-out-alt" />LogOut
-            </a>
-          </li>
-        </div>
-      </nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <router-link to="/home" class="nav-link">
+            <font-awesome-icon icon="home" />หน้าแรก
+          </router-link>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+          <router-link to="/admin" class="nav-link">แผงควมคุม</router-link>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+          <router-link to="/admin/scb-deposit" class="nav-link"
+            >รายการฝาก(SCB)
+          </router-link>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+          <router-link to="/admin/users" class="nav-link"
+            >จัดการสมาชิก (Ufabet)
+          </router-link>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+          <router-link to="/admin/withdraw" class="nav-link"
+            >รายการถอนเงิน
+          </router-link>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <router-link to="/promotion" class="nav-link">โปรโมชั่น</router-link>
+        </b-navbar-nav>
 
-      <div class="container">
-        <router-view />
-      </div>
+        <b-navbar-nav class="ml-auto">
+          <div v-if="!currentUser" class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link">
+                <b-button
+                  id="show-btn"
+                  @click="$bvModal.show('bv-modal-example')"
+                >
+                  <font-awesome-icon icon="sign-in-alt" /> เข้าสู่ระบบ</b-button
+                >
+                <b-modal id="bv-modal-example" hide-footer>
+                  <div class="d-block text-center">
+                    <login />
+                  </div>
+                </b-modal>
+              </a>
+            </li>
+          </div>
+
+          <div v-if="currentUser" class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <router-link to="/profile" class="nav-link">
+                <font-awesome-icon icon="user" />
+                {{ currentUser.username }}
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href @click.prevent="logOut">
+                <font-awesome-icon icon="sign-out-alt" />LogOut
+              </a>
+            </li>
+          </div>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <div class="container">
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
+import Login from "../src/views/Login";
+
 export default {
+  data() {
+    return {
+      modalShow: false,
+    };
+  },
+
+  components: {
+    Login,
+  },
+
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -149,7 +136,6 @@ export default {
   color: #2c3e50;
   /* background-image: linear-gradient(#313131, #0a0a0a); */
   height: 100vh;
-  
 }
 /* .background{
   background-color: rgba(0, 0, 0, 0.74);
@@ -193,27 +179,16 @@ export default {
   }
 }
 
-.background{
-  background-image: url("assets/bg.jpg");
-   /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-
-  /* Preserve aspet ratio */
-  min-width: 100%;
-  min-height: 100%;
-}
-
 @font-face {
-   font-family: myFirstFont;
-   src: url("../font/Cloud-Light.ttf");
+  font-family: myFirstFont;
+  src: url("../font/Cloud-Light.ttf");
 }
 
+body {
+  background: url(assets/bg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 </style>

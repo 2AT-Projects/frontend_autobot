@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card card-container">
       <div>
-        <h2 class="cen">Login</h2>
+        <h2 class="cen">เข้าสู่ระบบ UFAVIP789</h2>
       </div>
 
       <b-form @submit.prevent="handleLogin">
@@ -39,10 +39,6 @@
           </b-button>
         </div>
 
-        <a href="/register" class="btn btn-primary btn-block">
-          <!-- <a href="/register"> Register</a> -->
-          <span>Register</span>
-        </a>
 
         <div class="form-group mt-3">
           <div v-if="message" class="alert alert-danger" role="alert">

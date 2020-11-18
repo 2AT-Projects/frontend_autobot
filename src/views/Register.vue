@@ -145,12 +145,12 @@
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading">
+            <button class="btn btn-primary btn-block" :disabled="loading" @click="$bvModal.show('bv-modal-example')">
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
               ></span>
-              <span>SignUp</span>
+              <span >SignUp</span>
             </button>
           </div>
         </div>
