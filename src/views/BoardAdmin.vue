@@ -6,6 +6,10 @@
     </header>
 
     <div>
+      <dashboard />
+    </div>
+
+    <div>
       <b-button @click="topUp">Top Up</b-button>
     </div>
     {{ message }}
@@ -30,9 +34,13 @@
 <script>
 import UserService from "../services/user.service";
 import RobotService from "../services/robot.service";
+import Dashboard from "../views/Dashboard.vue";
 
 export default {
   name: "Admin",
+  components: {
+    Dashboard,
+  },
   data() {
     return {
       content: "",

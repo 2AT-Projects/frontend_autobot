@@ -1,10 +1,16 @@
 <template>
   <div id="app" class="background">
     <!-- <div v-if="showAdminBoard" class="sidenav">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#clients">Clients</a>
-      <a href="#contact">Contact</a>
+       <a href><router-link to="/admin" class="nav-link">แผงควมคุม</router-link></a>
+       <router-link to="/admin/scb-deposit" class="nav-link"
+              >รายการฝาก(SCB)
+            </router-link>
+       <router-link to="/admin/users" class="nav-link"
+              >จัดการสมาชิก (Ufabet)
+            </router-link>
+      <router-link to="/admin/withdraw" class="nav-link"
+              >รายการถอนเงิน
+            </router-link>
     </div> -->
     <div class="">
       <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
@@ -147,12 +153,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   color: #2c3e50;
-  /* background-image: linear-gradient(#313131, #0a0a0a); */
-  height: 100vh;
+  /* background-image: linear-gradient(#313131, #0a0a0a);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100%; */
 }
+
 /* .background{
   background-color: rgba(0, 0, 0, 0.74);
 } */
+
 .sidenav {
   height: 100%;
   width: 160px;

@@ -13,7 +13,10 @@
           v-show="loading_balance"
           class="spinner-border spinner-border-md"
         ></span>
-        <h2 class="tx" v-if="loading_balance == false">{{ balance }}</h2>
+        <h2 class="tx" v-if="loading_balance == false && balance">
+          {{ balance }}
+        </h2>
+        <h2 v-else>0.00 ฿</h2>
       </div>
 
       <div class="elem mt-4">

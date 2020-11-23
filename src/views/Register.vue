@@ -61,7 +61,7 @@
               type="text"
               class="form-control"
               v-model="user.username"
-              v-validate="'required|max:10'"
+              v-validate="'required|max:15'"
               name="username"
               placeholder="เบอร์มือถือ"
               required

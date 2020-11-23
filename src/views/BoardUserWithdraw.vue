@@ -11,7 +11,10 @@
           v-show="loading_balance"
           class="spinner-border spinner-border-md"
         ></span>
-        <span v-if="loading_balance == false">{{ balance }}</span>
+        <span class="tx" v-if="loading_balance == false && balance == undefined">
+          {{ balance }}
+        </span>
+        <span v-else>0.00 ฿</span>
       </h3>
       <h3 v-else>
         <strong>เครดิตคงเหลือ:</strong>

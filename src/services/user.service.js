@@ -1,6 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
+// const API_URL = 'https://api-ufaautoapp.herokuapp.com/api/app';
 const API_URL = 'http://localhost:8080/api/app';
 
 class UserService {
@@ -59,6 +60,15 @@ class UserService {
         });
     }
 
+    getAdminWithdrawBetweenDate(startDate, toDate) {
+        return axios.get(`${API_URL}/admin/withdraw/date`, {
+            headers: authHeader(),
+            params: {
+                startDate: startDate,
+                toDate: toDate
+            }
+        })
+    }
 
     getAdminWithdraw(params) {
         return axios.get(`${API_URL}/admin/withdraw`, {
