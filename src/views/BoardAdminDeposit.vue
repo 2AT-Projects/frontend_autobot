@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <header class="jumbotron">
-      <h3>รายการเงินเข้า (SCB)</h3>
+    <header class="jumbotron mt-3">
+      <h3>รายการเงินเข้าธนาคารไทยพานิช (SCB)</h3>
     </header>
 
     {{ message }}
@@ -33,7 +33,7 @@
       </p>
     </div>
 
-    <table class="table table-hover cen mt-4">
+    <table class="table table-hover table-dark cen mt-4">
       <thead>
         <tr>
           <th>เวลา</th>
@@ -52,7 +52,7 @@
           <td>{{ item.first_name }} {{ item.last_name }}</td>
           <td>{{ item.bank }}</td>
           <td>{{ item.bank_number }}</td>
-          <td>เติมเงิน {{ item.deposit }} บาท</td>
+          <td>เติมเงิน {{ item.credit }} บาท</td>
           <td v-if="item.status == 0">
             <p class="alert-warning">รอดำเนินการ</p>
           </td>
@@ -71,7 +71,41 @@
       </tbody>
     </table>
 
-    <div><strong>ยอดฝากโดยรวม:</strong> {{ sum }} บาท</div>
+    <div class="fcolor"><strong>ยอดฝากโดยรวม:</strong> {{ sum }} บาท</div>
+    <div class="">
+      <header class="jumbotron">
+        <h3>รายการเงินเข้าธนาคารกสิกรไทย (KBANK)</h3>
+      </header>
+      <table class="table table-hover table-dark cen mt-4">
+        <thead>
+          <tr>
+            <th>เวลา</th>
+            <th>วันที่</th>
+            <th>ชื่อ-สกุล</th>
+            <th>ธนาคาร</th>
+            <th>หมายเลขบัญชี</th>
+            <th>จำนวนเงิน</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(items, i) in kbank_deposit" :key="i">
+            <td>{{ items.time }}</td>
+            <td>{{ items.date }}</td>
+            <td>{{ items.first_name }} {{ items.last_name }}</td>
+            <td>{{ items.bank }}</td>
+            <td>{{ items.bank_number }}</td>
+            <td>{{ items.credit }} บาท</td>
+            <td v-if="items.status == 0">
+              <p class="alert-warning">รอดำเนินการ</p>
+            </td>
+            <td v-else>
+              <p class="alert-success">เติมเงินสำเร็จ</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -92,6 +126,7 @@ export default {
     return {
       th: th,
       content: [],
+      kbank_deposit: [],
       message: "",
       sum: "",
       sumToday: "",
@@ -133,7 +168,7 @@ export default {
 
           const arr = [];
           data.forEach((element) => {
-            const credit = Number(element.deposit);
+            const credit = Number(element.credit);
             arr.push(credit);
           });
           const sum = this.sumDeposit(arr);
@@ -149,14 +184,29 @@ export default {
       UserService.getAdminScbDeposit()
         .then((res) => {
           this.content = res.data.datas;
+          console.log(res.data.datas);
+
           const arr = [];
           this.content.forEach((element) => {
-            const credit = Number(element.deposit);
+            const credit = Number(element.credit);
             arr.push(credit);
           });
+          console.log(arr);
           const sum = this.sumDeposit(arr);
           this.sum = sum;
-          //   console.log(sum);
+          console.log(sum);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getTransectionsFromKbank() {
+      UserService.getAdminKbankDeposit()
+        .then((res) => {
+          const data = res.data;
+          console.log(data);
+          this.kbank_deposit = data;
         })
         .catch((err) => {
           console.log(err);
@@ -194,6 +244,7 @@ export default {
   },
 
   mounted() {
+    this.getTransectionsFromKbank();
     this.getDepositToday();
     this.getTransectionsFromScb();
     if (!this.currentUser) {
@@ -214,5 +265,9 @@ export default {
 
 .tx-sz {
   font-size: 20px;
+}
+
+.fcolor {
+  color: white;
 }
 </style>

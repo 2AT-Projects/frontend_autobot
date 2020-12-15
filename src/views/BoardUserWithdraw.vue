@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mt-5">
-      <h3 class="text-left">ถอนเงิน</h3>
+      <h2 class="text-center">ถอนเงิน</h2>
       <hr />
     </div>
     <div class="center mt-5">
@@ -11,20 +11,23 @@
           v-show="loading_balance"
           class="spinner-border spinner-border-md"
         ></span>
-        <span v-if="loading_balance == false">{{ balance }}</span>
+        <span v-if="loading_balance == false || balance == undefined">
+          {{ balance }} บาท
+        </span>
+        <span v-else> 0.00฿ </span>
       </h3>
       <h3 v-else>
         <strong>เครดิตคงเหลือ:</strong>
       </h3>
 
-      <span>
+      <span class="color1">
         <font-awesome-icon
           class="pointer"
           @click="refreshBalance"
           icon="sync"
         />
       </span>
-      <span> ดึงข้อมูล เวลา {{ time }}</span>
+      <span class="color1"> ดึงข้อมูล เวลา {{ time }}</span>
 
       <div class="input-credit mt-3">
         <b-form v-on:submit.prevent="confirmModal">
@@ -64,9 +67,9 @@
         </div>
       </div>
     </div>
-    <footer class="mt-5">
+    <footer class="mt-5 cen">
       <div>
-        <h4 class="text-left">5 รายการถอนล่าสุด</h4>
+        <h3 class="text-center">5 รายการถอนล่าสุด</h3>
         <hr />
       </div>
       <div class="center">
@@ -109,6 +112,10 @@
 <script>
 import UserService from "../services/user.service";
 import moment from "moment";
+
+Number.prototype.toCurrencyString = function () {
+  return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, "$&,");
+};
 
 export default {
   name: "Withdraw",
@@ -200,7 +207,7 @@ export default {
       await UserService.getUserBalanceFromUfabet()
         .then((response) => {
           this.loading_balance = false;
-          this.balance = response.data.credit.balance;
+          this.balance = response.data.balance;
           // console.log(this.content);
         })
         .catch((error) => {
@@ -217,7 +224,19 @@ export default {
     async withdrawList() {
       await UserService.getUserWithdrawList()
         .then((res) => {
-          this.content = res.data.datas;
+          const data = res.data.datas;
+          data.forEach((item) => {
+            let numberCr = Number(item.credit);
+            let credit = numberCr.toCurrencyString();
+            console.log(credit);
+            this.content.push({
+              time: item.time,
+              date: item.date,
+              username: item.username,
+              credit: credit,
+              status: item.status,
+            });
+          });
         })
         .catch((err) => {
           this.content = err;
@@ -240,6 +259,28 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  color: #ffffff;
+  font-weight: 600;
+}
+h3 {
+  color: #ffffff;
+  font-weight: 600;
+}
+.cen {
+  text-align: center;
+  padding-bottom: 100px;
+}
+.color1 {
+  color: #ffffff;
+}
+
+hr {
+  background-color: rgb(255, 0, 0);
+  max-width: 40%;
+  border: 2px solid red;
+}
+
 p {
   color: rgb(32, 32, 32);
   font-size: 16px;
@@ -254,7 +295,7 @@ p {
 }
 
 .input-credit {
-  width: 50%;
+  width: 100%;
   margin: auto;
 }
 </style>

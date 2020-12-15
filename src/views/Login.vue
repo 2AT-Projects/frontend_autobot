@@ -1,12 +1,13 @@
 <template>
   <div class="col-md-12">
-    <div class="card card-container">
+    <div class="mt-3">
       <div>
         <h2 class="cen">เข้าสู่ระบบ UFAVIP789</h2>
+        <hr />
       </div>
 
       <b-form @submit.prevent="handleLogin">
-        <b-form-group id="text-username" label="Username:" label-for="username">
+        <b-form-group id="text-username" label-for="username">
           <b-form-input
             id="text-username"
             name="username"
@@ -17,18 +18,18 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="text-password" label="Password:" label-for="password">
+        <b-form-group id="text-password" label-for="password">
           <b-input
             id="text-password"
             name="password"
             type="password"
             v-model="user.password"
-            placeholder="Enter Username"
+            placeholder="Enter Password"
             required
             aria-describedby="password-help-block"
           ></b-input>
         </b-form-group>
-
+        <!-- <hr /> -->
         <div class="form-group">
           <b-button type="submit" variant="warning" block :disabled="loading">
             <span
@@ -38,7 +39,6 @@
             <span>Login</span>
           </b-button>
         </div>
-
 
         <div class="form-group mt-3">
           <div v-if="message" class="alert alert-danger" role="alert">
@@ -69,12 +69,12 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/user");
     }
   },
   methods: {
     handleLogin() {
-      console.log('test');
+      console.log("test");
       this.loading = true;
       this.$validator.validateAll().then((isValid) => {
         if (!isValid) {
@@ -85,7 +85,7 @@ export default {
         if (this.user.username && this.user.password) {
           this.$store.dispatch("auth/login", this.user).then(
             () => {
-              this.$router.push("/profile");
+              this.$router.push("/user");
             },
             (error) => {
               this.loading = false;
@@ -110,14 +110,21 @@ label {
   margin-top: 10px;
 }
 
-.card-container.card {
+/* .card-container.card {
   max-width: 400px !important;
   padding: 40px 40px;
   background-color: black;
-}
+} */
 
 .cen {
   text-align: center;
+  color: white;
+}
+
+hr {
+  background-color: rgb(255, 0, 0);
+  max-width: 100%;
+  border: 2px solid red;
 }
 
 .card {

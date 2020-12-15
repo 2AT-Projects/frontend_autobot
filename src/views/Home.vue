@@ -13,21 +13,27 @@
     </div>
     <div class="bv-example-row">
       <b-row>
-        <b-col class="ss">
-          <vue-displacement-slideshow
-            :images="images"
-            displacement="require('../assets/test.jpg')"
-            intensity.number="0.2"
-            speedIn.number="1.4"
-            speedOut.number="1.4"
-            ease="Expo.easeInOut"
-            ref="slideshow"
-          ></vue-displacement-slideshow>
+        <b-col cols="9">
+          <b-carousel
+            id="carousel-fade"
+            style="text-shadow: 0px 0px 2px #000"
+            fade
+            indicators
+            img-width="1024"
+            img-height="430"
+          >
+            <b-carousel-slide
+              v-for="(image, i) in img"
+              v-bind:key="i"
+              v-bind:img-src="image"
+            >
+            </b-carousel-slide>
+          </b-carousel>
         </b-col>
-        <b-col>
-          <h2 class="font-color1">
+        <b-col cols="3">
+          <!-- <h2 class="font-color1">
             ระบบฝาก-ถอน Auto ที่รวดเร็วที่สุดในประเทศไทย
-          </h2>
+          </h2> -->
           <div class="app-body" v-if="!user">
             <!-- CSS ONLY -->
             <a
@@ -50,54 +56,100 @@
               </div>
             </b-modal>
           </div>
-		  <div class="app-body" v-if="user">
-      <!-- CSS ONLY -->
-      <a href="http://localhost:8081/deposit" class="btn-wrapper btn-wrapper1">
-        <div class="btn-tail"></div>
-        <div class="btn-body">
-          <p>ฝาก<span style="font-size: 0.7rem; margin-left: 5px"></span></p>
-        </div>
-      </a>
-    </div>
-    <br />
-    <div class="app-body" v-if="user">
-      <!-- CSS ONLY -->
-      <a href="http://localhost:8081/withdraw" class="btn-wrapper btn-wrapper1">
-        <div class="btn-tail"></div>
-        <div class="btn-body">
-          <p>ถอน<span style="font-size: 0.7rem; margin-left: 5px"></span></p>
-        </div>
-      </a>
-    </div>
-    <br />
-    <div class="app-body" v-if="user">
-      <!-- CSS ONLY -->
-      <a href="http://localhost:8081/user" class="btn-wrapper btn-wrapper1">
-        <div class="btn-tail"></div>
-        <div class="btn-body">
-          <p>
-            กระเป๋าตัง<span style="font-size: 0.7rem; margin-left: 5px"></span>
-          </p>
-        </div>
-      </a>
-    </div>
-	<br>
-		<div class="app-body" v-if="user">
-      <!-- CSS ONLY -->
-      <a href="http://localhost:8081/user" class="btn-wrapper btn-wrapper1">
-        <div class="btn-tail"></div>
-        <div class="btn-body">
-          <p>
-            เข้าเล่น UFABET<span style="font-size: 0.7rem; margin-left: 5px"></span>
-          </p>
-        </div>
-      </a>
-    </div>
-
+          <div class="app-body" v-if="user">
+            <!-- CSS ONLY -->
+            <a
+              href="http://localhost:8081/deposit"
+              class="btn-wrapper btn-wrapper1"
+            >
+              <div class="btn-tail"></div>
+              <div class="btn-body">
+                <p>
+                  ฝาก<span style="font-size: 0.7rem; margin-left: 5px"></span>
+                </p>
+              </div>
+            </a>
+          </div>
+          <br />
+          <div class="app-body" v-if="user">
+            <!-- CSS ONLY -->
+            <a
+              href="http://localhost:8081/withdraw"
+              class="btn-wrapper btn-wrapper1"
+            >
+              <div class="btn-tail"></div>
+              <div class="btn-body">
+                <p>
+                  ถอน<span style="font-size: 0.7rem; margin-left: 5px"></span>
+                </p>
+              </div>
+            </a>
+          </div>
+          <br />
+          <div class="app-body" v-if="user">
+            <!-- CSS ONLY -->
+            <a
+              href="http://localhost:8081/user"
+              class="btn-wrapper btn-wrapper1"
+            >
+              <div class="btn-tail"></div>
+              <div class="btn-body">
+                <p>
+                  กระเป๋าตัง<span
+                    style="font-size: 0.7rem; margin-left: 5px"
+                  ></span>
+                </p>
+              </div>
+            </a>
+          </div>
+          <br />
+          <div class="app-body" v-if="user">
+            <!-- CSS ONLY -->
+            <a
+              href="http://localhost:8081/user"
+              class="btn-wrapper btn-wrapper1"
+            >
+              <div class="btn-tail"></div>
+              <div class="btn-body">
+                <p>
+                  เข้าเล่น UFABET<span
+                    style="font-size: 0.7rem; margin-left: 5px"
+                  ></span>
+                </p>
+              </div>
+            </a>
+          </div>
         </b-col>
       </b-row>
     </div>
+    <div class="mt-4">
+      <b-container>
+        <b-row>
+          <b-col v-for="(item, inx) in card_detail" v-bind:key="inx">
+            <b-card
+              v-bind:title="item.title"
+              v-bind:img-src="item.img"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 20rem"
+              class="mb-2"
+            >
+              <b-card-text>
+                {{ item.description }}
+              </b-card-text>
 
+              <router-link v-if="user" to="/user" class="font-color"
+                ><b-button variant="danger">test</b-button></router-link
+              >
+              <router-link v-else to="/register">
+                <b-button variant="danger">test</b-button></router-link
+              >
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
     <!-- <div class="app-body" v-if="user == null">
       <a href="http://localhost:8081/Login" class="btn-wrapper btn-wrapper1">
         <div class="btn-tail"></div>
@@ -111,7 +163,12 @@
       </a>
     </div> -->
     <br />
-    
+    <div class="mt-9">
+      <b-row>
+        <b-col> <p>test</p> </b-col>
+        <b-col> <img :src="card_detail[0].img" style="width: 100%" /> </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
@@ -126,6 +183,28 @@ export default {
     return {
       content: "",
       user: "",
+      img: [
+        require("../assets/slider1.png"),
+        require("../assets/slider1.png"),
+        require("../assets/slider1.png"),
+      ],
+      card_detail: [
+        {
+          title: "card 1",
+          img: require("../assets/slider1.png"),
+          description: "test1",
+        },
+        {
+          title: "card 2",
+          img: require("../assets/slider1.png"),
+          description: "test2",
+        },
+        {
+          title: "card 3",
+          img: require("../assets/slider1.png"),
+          description: "test3",
+        },
+      ],
     };
   },
   components: {
@@ -141,15 +220,8 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     },
-    init() {
-      //We loop through all our images by calling the 'next' method of our component every 2 seconds
-      setInterval(() => {
-        this.$refs.slideshow.next();
-      }, 2000);
-    },
   },
   mounted() {
-    this.init();
     this.user = this.currentUser();
     UserService.getPublicContent().then(
       (response) => {
@@ -203,7 +275,7 @@ export default {
 
   --bg-color: #fffff0;
   --font-color: #000000;
-  --bg-color-hovered: #ffafeb;
+  --bg-color-hovered: #fd0000;
   --font-color-hovered: #000000;
 }
 
@@ -218,7 +290,7 @@ export default {
 
   --bg-color: #fffff0;
   --font-color: #000000;
-  --bg-color-hovered: #ffafeb;
+  --bg-color-hovered: #a10008;
   --font-color-hovered: #000000;
 }
 
@@ -233,7 +305,7 @@ export default {
 
   --bg-color: #fffff0;
   --font-color: #000000;
-  --bg-color-hovered: #ffafeb;
+  --bg-color-hovered: #a10008;
   --font-color-hovered: #000000;
 }
 
@@ -292,6 +364,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+}
+
+.bv-example-row {
+  justify-content: center;
 }
 
 .ss {

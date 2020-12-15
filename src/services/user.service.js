@@ -1,7 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'https://api-ufaautoapp.herokuapp.com/api/app';
+// const API_URL = 'https://api-ufaautoapp.herokuapp.com/api/app';
+const API_URL = 'http://localhost:8080/api/app';
 
 class UserService {
     getPublicContent() {
@@ -40,6 +41,26 @@ class UserService {
         return axios.get(`${API_URL}/admin/scb/deposit/list`, { headers: authHeader() })
     }
 
+    getAdminKbankDeposit() {
+        return axios.get(`${API_URL}/admin/kbank/deposit/`, { headers: authHeader() })
+    }
+
+    getAdminKbankDepositWithStatus() {
+        return axios.get(`${API_URL}/admin/kbank/deposit/status`, { headers: authHeader() })
+    }
+
+    getAdminScbDepositWithStatus() {
+        return axios.get(`${API_URL}/admin/scb/deposit/status`, { headers: authHeader() })
+    }
+
+    getAdminScbDepositSevenday() {
+        return axios.get(`${API_URL}/admin/scb/deposit/sevenday`, { headers: authHeader() })
+    }
+
+    getAdminKbankDepositSevenDay() {
+        return axios.get(`${API_URL}/admin/kbank/deposit/sevenday`, { headers: authHeader() })
+    }
+
     getAdminScbDepositBetweenDate(startDate, toDate) {
         return axios.get(`${API_URL}/admin/scb/deposit/`, {
             headers: authHeader(),
@@ -59,12 +80,19 @@ class UserService {
         });
     }
 
+    getAdminWithdrawList() {
+        return axios.get(`${API_URL}/admin/withdraw/list`, { headers: authHeader() })
+    }
 
     getAdminWithdraw(params) {
         return axios.get(`${API_URL}/admin/withdraw`, {
             headers: authHeader(),
             params: params
         })
+    }
+
+    getAdminWithdrawSevenDay() {
+        return axios.get(`${API_URL}/admin/withdraw/sevenday`, { headers: authHeader() })
     }
 
     getAdminWithdrawByStatus(params) {

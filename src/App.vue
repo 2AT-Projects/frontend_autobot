@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="background">
-    <b-navbar toggleable="lg" type="dark">
-      <b-navbar-brand href="#">AUTOBET</b-navbar-brand>
+    <b-navbar toggleable="lg" type="dark" class="navcolor">
+      <b-navbar-brand href="#">AUTO789</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -29,7 +29,7 @@
             >รายการถอนเงิน
           </router-link>
         </b-navbar-nav>
-        <b-navbar-nav v-if="showAdminBoard" class="nav-item">
+        <b-navbar-nav v-if="showModeratorBoard" class="nav-item">
           <router-link to="/mod" class="nav-link">Moderator Board</router-link>
         </b-navbar-nav>
         <b-navbar-nav>
@@ -71,6 +71,93 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+
+    <footer>
+      <div v-if="!currentUser" class="myBlock myCn">
+        <!-- <div class="row">
+          <div class="col-md-4">
+            <router-link to="/register" class="color2">
+              <span> <font-awesome-icon icon="user-plus" /></span>
+              <div>สมัครสมาชิก</div>
+            </router-link>
+          </div>
+          <div class="col-4">
+            <div class="rcorners4">
+              <router-link to="/" class="color1">
+                <div><font-awesome-icon icon="home" /></div>
+                <div>หน้าแรก</div>
+              </router-link>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <router-link to="/login" class="color2">
+              <span><font-awesome-icon icon="sign-in-alt" /></span>
+              <div>เข้าสู่ระบบ</div>
+            </router-link>
+          </div>
+        </div> -->
+        <b-row>
+          <b-col
+            ><router-link to="/register" class="color2">
+              <div> <font-awesome-icon icon="user-plus" /></div>
+              <div>สมัครสมาชิก</div>
+            </router-link></b-col
+          >
+          <b-col>
+            <div class="rcorners4">
+              <router-link to="/" class="color1">
+                <div><font-awesome-icon icon="home" /></div>
+                <div>หน้าแรก</div>
+              </router-link>
+            </div></b-col
+          >
+          <b-col>
+            <router-link to="/login" class="color2">
+              <span><font-awesome-icon icon="sign-in-alt" /></span>
+              <div>เข้าสู่ระบบ</div>
+            </router-link></b-col
+          >
+        </b-row>
+      </div>
+
+      <div v-if="showUserBoard" class="myBlock myCn">
+        <div class="row">
+          <div class="col-2">
+            <router-link to="/deposit" class="color2">
+              <font-awesome-icon icon="university" />
+              <div>ฝาก</div>
+            </router-link>
+          </div>
+          <div class="col-2">
+            <router-link to="/withdraw" class="color2">
+              <font-awesome-icon icon="university" />
+              <div>ถอน</div>
+            </router-link>
+          </div>
+          <div class="col-4">
+            <div class="rcorners4">
+              <router-link to="/user" class="color1">
+                <div><font-awesome-icon icon="wallet" /></div>
+                <div>กระเป๋า</div>
+              </router-link>
+            </div>
+          </div>
+          <div class="col-2">
+            <router-link to="/profile" class="color2">
+              <span><font-awesome-icon icon="dice" /></span>
+              <span>let's</span>
+            </router-link>
+          </div>
+          <div class="col-2">
+            <router-link to="/register" class="color2">
+              <font-awesome-icon icon="list-alt" />
+              <div>ประวัติ</div>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </footer>
+
     <div class="container">
       <router-view />
     </div>
@@ -140,6 +227,7 @@ export default {
 /* .background{
   background-color: rgba(0, 0, 0, 0.74);
 } */
+
 .sidenav {
   height: 100%;
   width: 160px;
@@ -150,6 +238,19 @@ export default {
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
+}
+
+.navcolor {
+  border-top: 1px solid rgb(250, 8, 0);
+  border-bottom: 1px solid rgb(250, 29, 0);
+  background-image: linear-gradient(
+    to bottom,
+    #000000,
+    #121212fd,
+    #1b1b1bfd,
+    #232323,
+    #2b2b2bee
+  );
 }
 
 .sidenav a {
@@ -184,8 +285,93 @@ export default {
   src: url("../font/Cloud-Light.ttf");
 }
 
+/* .myBlock {
+  display: none;
+} */
+.myCn {
+ 
+ 
+  /* center flex items horizontally */
+  align-items:initial;
+  /* center all content vertically */
+  justify-content: center;
+}
+
+/* @media only screen and (max-width: 767px) { */
+.myBlock {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 40;
+  width: 100%;
+  display: block;
+  padding: 15px;
+  border-top: 2px solid rgb(250, 8, 0);
+  background-image: linear-gradient(
+    to bottom,
+    #080808,
+    #1f1f1f,
+    #242424,
+    #222222,
+    #303030
+  );
+  /* its children will be flex items */
+  display: flex;
+  
+  /* border-top-right-radius: 25px;
+    border-top-left-radius: 25px; */
+}
+
+.myBlock div div {
+  color: white;
+  text-align: center;
+}
+
+.color1 {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.color2 {
+  color: white;
+  font-size: 15px;
+  /* font-weight: 600; */
+}
+
+.rcorners3 {
+  border: 2px solid rgba(255, 24, 8, 0.904);
+  border-radius: 50%;
+  background: #313131;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  margin-top: -70px;
+  margin-bottom: -50px;
+}
+
+.rcorners4 {
+  border: 2px solid rgba(255, 8, 8, 0.904);
+  border-radius: 50%;
+  background: #202020;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  margin-bottom: -20px;
+}
+/* } */
+
 body {
-  background: url(assets/bg.jpg) no-repeat center center fixed;
+  /* background-image: linear-gradient(
+    to top,
+    #000000,
+    #0c0909,
+    #141210,
+    #191815,
+    #1c1e1a
+  ); */
+  background: url("assets/bg-2.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

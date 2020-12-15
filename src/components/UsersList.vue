@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <header class="jumbotron">
+    <header class="jumbotron mt-3">
       <h3>จัดการสมาชิก (Ufabet)</h3>
     </header>
     <div>
@@ -49,7 +49,7 @@
 
     <div class="mt-3">
       <h4>รายชื่อสมาชิก</h4>
-      <table class="table table-hover">
+      <table class="table table-hover table-dark">
         <thead class="">
           <tr>
             <th>id</th>
@@ -235,6 +235,7 @@ export default {
         .then((response) => {
           const { users, totalItems } = response.data;
           this.users = users;
+          console.log(this.users);
           this.count = totalItems;
           console.log(totalItems);
           console.log(this.users);

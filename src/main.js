@@ -1,3 +1,4 @@
+
 import Vue from 'vue';
 import App from './App.vue';
 import { router } from './router';
@@ -25,7 +26,11 @@ import {
   faTrash,
   faSync,
   faCheck,
-  faHourglass
+  faHourglass,
+  faUniversity,
+  faListAlt,
+  faWallet,
+  faDice
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -42,7 +47,11 @@ library.add(
   faTrash,
   faSync,
   faCheck,
-  faHourglass
+  faHourglass,
+  faUniversity,
+  faListAlt,
+  faWallet,
+  faDice
 );
 
 Vue.config.productionTip = false;

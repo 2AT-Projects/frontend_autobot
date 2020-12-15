@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <table class="table table-hover cen mt-4">
+    <table class="table table-hover table-dark cen mt-4">
       <thead>
         <tr>
           <th>id</th>

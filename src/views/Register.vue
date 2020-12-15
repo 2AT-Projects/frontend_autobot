@@ -1,11 +1,11 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
+  <div class="col-md-12 mt-3">
+    <div>
+      <h2 class="cen">สมัครสมาชิก UFAVIP789</h2>
+      <hr />
+    </div>
+
+    <div class="card-container">
       <form name="form" @submit.prevent="handleRegister">
         <div v-if="!successful">
           <div class="form-row">
@@ -145,12 +145,12 @@
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading" @click="$bvModal.show('bv-modal-example')">
+            <button class="btn btn-warning btn-block" :disabled="loading">
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
               ></span>
-              <span >SignUp</span>
+              <span>ยืนยัน</span>
             </button>
           </div>
         </div>
@@ -234,6 +234,17 @@ label {
 
 .f1 {
   color: black;
+}
+
+hr {
+  background-color: rgb(255, 0, 0);
+  max-width: 100%;
+  border: 2px solid red;
+}
+
+h2 {
+  color: rgb(255, 255, 255);
+  font-weight: 900;
 }
 .card {
   background-color: #f7f7f7;

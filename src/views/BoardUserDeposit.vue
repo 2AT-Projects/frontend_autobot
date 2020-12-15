@@ -1,10 +1,13 @@
 <template>
   <div class="container">
     <div class="mt-5">
-      <div>
-        <h3 class="text-left">บัญชีฝากเงิน</h3>
+      <div class="text-left">
+        <h3 class="tx">บัญชีฝากเงิน</h3>
         <hr />
       </div>
+      <!-- <div>
+        <img src="../assets/106_th.jpg" />
+      </div> -->
       <div class="jumbotron" style="background: #4e2e7f">
         <div
           class="scb-box d-flex flex-row align-items-center justify-content-start"
@@ -61,7 +64,7 @@
       </p>
     </div>
 
-    <div>
+    <!-- <div>
       <b-form v-on:submit.prevent="deposit">
         <b-form-group>
           <b-form-input
@@ -85,11 +88,11 @@
           <b-button type="submit">ยืนยัน</b-button>
         </b-form-group>
       </b-form>
-    </div>
+    </div> -->
 
     <footer class="mt-5 cen">
       <div>
-        <h4 class="text-left">5 รายการฝากล่าสุด</h4>
+        <h4 class="tx">5 รายการฝากล่าสุด</h4>
         <hr />
       </div>
       <div>
@@ -106,7 +109,7 @@
             <tr v-for="(item, i) in content" :key="i">
               <td>{{ item.time }}</td>
               <td>{{ item.date }}</td>
-              <td>เติมเงิน {{ item.deposit }} บาท</td>
+              <td>เติมเงิน {{ item.credit }} บาท</td>
               <td v-if="item.status == 0">
                 <p class="alert-warning">กำลังดำเนินการ</p>
               </td>
@@ -132,6 +135,10 @@
 <script>
 import UserService from "../services/user.service";
 import moment from "moment";
+
+Number.prototype.toCurrencyString = function () {
+  return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, "$&,");
+};
 
 export default {
   name: "Deposit",
@@ -189,7 +196,18 @@ export default {
     getDepositList() {
       UserService.getUserDepositList().then(
         (response) => {
-          this.content = response.data.datas;
+          const data = response.data.datas;
+          data.forEach((item) => {
+            let numberCr = Number(item.credit);
+            let credit = numberCr.toCurrencyString();
+            console.log(credit);
+            this.content.push({
+              time: item.time,
+              date: item.date,
+              credit: credit,
+              status: item.status,
+            });
+          });
           // this.mergedStatus(list);
         },
         (error) => {
@@ -222,7 +240,7 @@ export default {
     deposit() {
       const toDay = new Date();
       const newDate = moment(toDay).format("DD/MM/YYYY");
-      
+
       this.infoDeposit = {
         time: this.time,
         date: newDate,
@@ -254,29 +272,51 @@ export default {
   border-radius: 5px;
 }
 
+.tx {
+  color: white;
+  text-align: center;
+  font-weight: 600;
+}
+
+h6 {
+  color: gold;
+}
+
 #rcorners1 {
   border-radius: 5px;
-  background: #1a1a1ae3;
+  background: #252525;
   text-align: center;
   padding: 8px 2px -5px;
   width: 100%;
   color: rgb(255, 76, 22);
 }
+
 .cen {
   text-align: center;
+  padding-bottom: 100px;
 }
+
 .font14 {
   font-size: 16px;
   color: white;
 }
+
+hr {
+  background-color: red;
+  max-width: 40%;
+  border: 2px solid red;
+}
+
 .font15 {
   color: rgb(31, 31, 31);
   /* border: 1px solid greenyellow; */
   /* width: 35%; */
 }
+
 .font1 {
   text-align: center;
 }
+
 #preview {
   display: flex;
   justify-content: center;
